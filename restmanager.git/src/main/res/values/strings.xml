@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">rest</string>
+    <string name="app_rest_server_url"></string>
+</resources>

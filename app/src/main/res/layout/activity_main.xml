@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <!--<AnalogClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/analogClock"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="187dp" />-->
+
+    <AnalogClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/analogClock"
+        android:layout_gravity="center_horizontal" />
+
+    <TimePicker
+        android:id="@+id/time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/msg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="no alarm" />
+    <Button
+        android:id="@+id/set"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="set alarm" />
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="delete alarm" />
+</LinearLayout>
