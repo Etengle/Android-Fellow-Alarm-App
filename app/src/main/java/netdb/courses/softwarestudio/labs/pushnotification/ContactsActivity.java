@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -35,18 +37,21 @@ public class ContactsActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_contacts);
-        Toast.makeText(this, "Long press to choose a contact person", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Click to see the phone number." +
+                "\nLong press to confirm.", Toast.LENGTH_LONG).show();
         this.contactsList = (ListView) super.findViewById(R.id.contactsList);
         // query
         this.result = super.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
-        super.startManagingCursor(this.result);
+        // super.startManagingCursor(this.result);
         // physical list
         this.allContacts = new ArrayList<Map <String, Object>>();
         // get data
         for (this.result.moveToFirst(); !this.result.isAfterLast(); this.result.moveToNext()) {
             Map <String, Object> contact = new HashMap<String, Object>();
             // set ID
+            if ( this.result.getInt(this.result.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) == 0 )
+                continue;
             contact.put("_id", this.result.getInt(this.result.getColumnIndex(ContactsContract.Contacts._ID)));
             // set name
             contact.put("name", this.result.getString(this.result.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
@@ -62,42 +67,95 @@ public class ContactsActivity extends ActionBarActivity {
         this.contactsList.setAdapter(this.simple);
         super.registerForContextMenu(this.contactsList); // long press
         // contactsList.setOnItemClickListener(new OnItemClickListener());
+        contactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View itemClicked, int
+                    position, long id) {
+                getNumber(position);
+            }
+        });
+        contactsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> parent, View itemClicked,
+                                           int position, long id) {
+                //if (PhoneNumber.equals("0"))
+                getNumber(position);
+                finishActivity();
+                return true;
+            }
+        });
+
     }
 
     // show
-    @Override
+    /*@Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuinfo){
         super.onCreateContextMenu(menu, v, menuinfo);
+        if (!PhoneNumber.equals("0"));
+            finishActivity();
         menu.setHeaderTitle("Contact");
-        menu.add(Menu.NONE, Menu.FIRST + 1, 1, "Choose it!");
-    }
+        menu.add(Menu.NONE, Menu.FIRST + 1, 1, "Choose him/her!");
+    }*/
 
-    @Override
+    /*@Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int position = info.position;
-        long contactsId = Long.parseLong(this.allContacts.get(position).get("_id").toString());
         switch (item.getItemId()){
             case Menu.FIRST + 1:
-                String phoneSelection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?";
-                String[] phoneSelectionArgs = { String.valueOf(contactsId)};
-                Cursor c = super.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null, phoneSelection, phoneSelectionArgs, null);
-                StringBuffer buf = new StringBuffer();
-                buf.append("You just chose: " + this.allContacts.get(position).get("name") + "\nHis/Her number is: ");
-                /*for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext())
-                    buf.append(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.
-                            NUMBER))).append(", ");*/
-                c.moveToFirst();
-                PhoneNumber = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                buf.append(PhoneNumber);
-                Toast.makeText(this, buf, Toast.LENGTH_LONG).show();
-                ContactsActivity.this.getIntent().putExtra("PhoneNumber", PhoneNumber);
-                ContactsActivity.this.setResult(RESULT_OK, ContactsActivity.this.getIntent());
-                ContactsActivity.this.finish();
+                finishActivity();
                 break;
         }
         return false;
+    }*/
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_contact, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle the action bar items pressed
+        switch (item.getItemId()) {
+            /*case R.id.action_add:
+                Intent intent = new Intent(this, PostUserActivity.class);
+                startActivity(intent);
+                return true;*/
+            case R.id.action_settings:
+                Random r = new Random();
+                int position = r.nextInt(allContacts.size());
+                // int position = (int) (Math.random() % allContacts.size());
+                // Toast.makeText(ContactsActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                getNumber(position);
+                finishActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    private void getNumber(int position){
+        Long contactsId = Long.parseLong(allContacts.get(position).get("_id").toString());
+
+        String phoneSelection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?";
+        String[] phoneSelectionArgs = {String.valueOf(contactsId)};
+        Cursor c = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null, phoneSelection, phoneSelectionArgs, null);
+        StringBuffer buf = new StringBuffer();
+        buf.append("You just chose: " + allContacts.get(position).get("name") + "\nHis/Her number is: ");
+                /*for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext())
+                    buf.append(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.
+                            NUMBER))).append(", ");*/
+        c.moveToFirst();
+        PhoneNumber = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        buf.append(PhoneNumber);
+        Toast.makeText(ContactsActivity.this, buf, Toast.LENGTH_SHORT).show();
+    }
+
+    private void finishActivity(){
+        ContactsActivity.this.getIntent().putExtra("PhoneNumber", PhoneNumber);
+        ContactsActivity.this.setResult(RESULT_OK, ContactsActivity.this.getIntent());
+        ContactsActivity.this.finish();
     }
 
 }

@@ -1,10 +1,14 @@
 package netdb.courses.softwarestudio.labs.pushnotification;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -42,6 +46,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private final static String TAG = "MainActivity";
     private final static String SENDER_ID = "49003202870";
 
+    private MediaPlayer mediaPlayer = null;
+    private Vibrator vibrator;
+
+
     private GoogleCloudMessaging gcm;
     static protected String regId = null;
     private Context context;
@@ -55,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private int minute = 0;
     private Calendar calendar = Calendar.getInstance();
     public static final String PROPERTY_REG_ID = "registration_id";
-    public static String PhoneNumber = "0800000000";
+    public static String PhoneNumber = "117";
 
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -78,6 +86,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         delete.setOnClickListener(new DeleteOnClickListener());
         time.setIs24HourView(true) ;
         time.setOnTimeChangedListener(new OnTimeChangedListenerImpl());
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.alarmsound);
 
 
 
@@ -202,10 +212,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle the action bar items pressed
         switch (item.getItemId()) {
-            /*case R.id.action_add:
-                Intent intent = new Intent(this, PostUserActivity.class);
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SnoozeDialog.class);
                 startActivity(intent);
-                return true;*/
+                return true;
             case R.id.action_get:
                 Intent intent2 = new Intent(this, ContactsActivity.class);
                 // startActivity(intent);
@@ -258,6 +268,17 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             Integer counter = prefs.getInt("counter", 0);
             editor.putInt("counter", 0);
             editor.commit();
+                mediaPlayer.stop();
+                // mediaPlayer.release();
+                vibrator.cancel();
+
+            if (AlarmMessage.alarm != null){
+                Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
+                intent.setAction("slighten.setalarm");
+                PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                AlarmMessage.alarm.cancel(sender);
+                MainActivity.this.msg.setText("no alarm");
+            }
             if (MainActivity.this.alarm != null) {
                 Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
                 intent.setAction("slighten.setalarm");
@@ -266,6 +287,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 MainActivity.this.msg.setText("no alarm");
                 Toast.makeText(MainActivity.this, "delete successfully", Toast.LENGTH_SHORT).show();
             }
+
         }
 
     }
@@ -274,9 +296,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             PhoneNumber = data.getStringExtra("PhoneNumber");
-            // Toast.makeText(this, PhoneNumber, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, PhoneNumber, Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "請選取一位連絡人", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please choose a contact person", Toast.LENGTH_SHORT).show();
         }
     }
 

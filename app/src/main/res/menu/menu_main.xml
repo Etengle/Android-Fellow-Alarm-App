@@ -7,7 +7,7 @@
 
     <item
         android:id="@+id/action_get"
-        android:icon="@drawable/ic_action_social_group"
+        android:icon="@drawable/ic_action_action_account_box"
         android:title="get"
         app:showAsAction="always"/>
 
@@ -19,9 +19,9 @@
 
 
 
-    <!--<item
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />-->
+        android:title="Set Snooze"
+        app:showAsAction="never" />
 </menu>

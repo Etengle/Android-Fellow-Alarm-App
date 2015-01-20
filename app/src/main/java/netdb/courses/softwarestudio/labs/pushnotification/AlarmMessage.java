@@ -29,7 +29,7 @@ public class AlarmMessage extends Activity {
     private MediaPlayer mediaPlayer = null;
     private Vibrator vibrator;
     private AudioManager audio = null;
-    private AlarmManager alarm = null;
+    protected static AlarmManager alarm = null;
     private TextView msg = null;
     private Calendar calendar = Calendar.getInstance();
     static public SharedPreferences prefs;
@@ -61,37 +61,78 @@ public class AlarmMessage extends Activity {
                 .setPositiveButton("Snooze", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        prefs = getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
-                        editor = prefs.edit();
-                        counter = prefs.getInt("counter", 0);
-
-                        alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                        Intent intent = new Intent(AlarmMessage.this, AlarmReceiver.class);
-                        intent.setAction("slighten.setalarm");
-                        PendingIntent sender = PendingIntent.getBroadcast(AlarmMessage.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 60000, sender);
-                        // msg.setText("Alarm time: " + calendar.get + ":" + calendar.MINUTE+1);
-                        mediaPlayer.stop();
-                        mediaPlayer.release();
-                        vibrator.cancel();
-
-                        if (counter < 2)
-                            Toast.makeText(AlarmMessage.this, "Snooze after 1 minute", Toast.LENGTH_SHORT).show();
-                        else if (counter == 2)
-                            Toast.makeText(AlarmMessage.this, "Snooze again 1 minute,\nand then I'll call someone else.", Toast.LENGTH_SHORT).show();
-                        else {
-                            String telStr = MainActivity.PhoneNumber;
-                            Uri uri = Uri.parse("tel:" + telStr);
-                            Intent it = new Intent();
-                            it.setAction(Intent.ACTION_CALL);
-                            it.setData(uri);
-                            startActivity(it);
-                        }
-                        editor.putInt("counter", ++counter);
-                        editor.commit();
-                        AlarmMessage.this.finish();
+                        cancelAlarm();
                     }
                 }).show();
     }
 
+    private void cancelAlarm(){
+        prefs = getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        editor = prefs.edit();
+        counter = prefs.getInt("counter", 0);
+
+        alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(AlarmMessage.this, AlarmReceiver.class);
+        intent.setAction("slighten.setalarm");
+        PendingIntent sender = PendingIntent.getBroadcast(AlarmMessage.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 60000, sender);
+        // msg.setText("Alarm time: " + calendar.get + ":" + calendar.MINUTE+1);
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            // mediaPlayer.release();
+        }
+            vibrator.cancel();
+        if (counter < 2)
+            Toast.makeText(AlarmMessage.this, "Snooze after 1 minute", Toast.LENGTH_SHORT).show();
+        else if (counter == 2)
+            Toast.makeText(AlarmMessage.this, "Snooze again 1 minute,\nand then it'll call someone else.", Toast.LENGTH_SHORT).show();
+        else {
+            String telStr = MainActivity.PhoneNumber;
+            Uri uri = Uri.parse("tel:" + telStr);
+            Intent it = new Intent();
+            it.setAction(Intent.ACTION_CALL);
+            it.setData(uri);
+            startActivity(it);
+        }
+        editor.putInt("counter", ++counter);
+        editor.commit();
+        AlarmMessage.this.finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // cancelAlarm();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // cancelAlarm();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cancelAlarm();
+        /*mediaPlayer.stop();
+        vibrator.cancel();
+        prefs = getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        editor = prefs.edit();
+        counter = prefs.getInt("counter", 0);
+        editor.putInt("counter", ++counter);
+        editor.commit();
+        if (counter < 2)
+            Toast.makeText(AlarmMessage.this, "Snooze after 1 minute", Toast.LENGTH_SHORT).show();
+        else if (counter == 2)
+            Toast.makeText(AlarmMessage.this, "Snooze again 1 minute,\nand then I'll call someone else.", Toast.LENGTH_SHORT).show();
+        else {
+            String telStr = MainActivity.PhoneNumber;
+            Uri uri = Uri.parse("tel:" + telStr);
+            Intent it = new Intent();
+            it.setAction(Intent.ACTION_CALL);
+            it.setData(uri);
+            startActivity(it);
+        }*/
+    }
 }
