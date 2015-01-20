@@ -15,6 +15,8 @@ import android.media.MediaPlayer;
 import android.content.Context;
 import android.os.Vibrator;
 import java.util.Calendar;
+import java.util.Random;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -47,10 +49,16 @@ public class AlarmMessage extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         msg = (TextView) findViewById(R.id.msg);
         // setContentView(R.layout.activity_main);
+        prefs = getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+        counter = prefs.getInt("counter", 0);
+
         audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         audio.adjustVolume(AudioManager.ADJUST_RAISE, 0);
-        mediaPlayer = MediaPlayer.create(AlarmMessage.this, R.raw.alarmsound);
+        if (counter >= 2)
+            mediaPlayer = MediaPlayer.create(AlarmMessage.this, R.raw.extreme_clock_alarm);
+        else
+            mediaPlayer = MediaPlayer.create(AlarmMessage.this, R.raw.alarmsound);
         mediaPlayer.setVolume(1.0f, 1.0f);
         mediaPlayer.setLooping(true);
         /*try {
@@ -60,9 +68,9 @@ public class AlarmMessage extends ActionBarActivity {
         }*/
         mediaPlayer.start();
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        vibrator.vibrate(new long[] { 0, 2000, 500 }, 0);
+        vibrator.vibrate(new long[] { 0,  ((int)(Math.random()*30)+1)*100, ((int)(Math.random()*5)+1)*100 , ((int)(Math.random()*30)+1)*100}, 0);
         Dialog dialog = new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setTitle("時間到囉!")
-                .setMessage(new SimpleDateFormat("現在是 H 點 mm 分 ss 秒")
+                .setMessage(new SimpleDateFormat("現在是aaa H 點 mm 分 ss 秒")
                         .format(new Date(System.currentTimeMillis())))
                 .setPositiveButton("Snooze", new DialogInterface.OnClickListener() {
                     @Override
@@ -87,9 +95,7 @@ public class AlarmMessage extends ActionBarActivity {
     }
 
     private void cancelAlarm(){
-        prefs = getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
         editor = prefs.edit();
-        counter = prefs.getInt("counter", 0);
         snoozeIntevalinMills = prefs.getInt("snoozeInteval", 0);
         snoozeIntevalinMills = (snoozeIntevalinMills < 5000) ? 60000 : snoozeIntevalinMills;
 
@@ -111,11 +117,11 @@ public class AlarmMessage extends ActionBarActivity {
             editor.putInt("counter", ++counter);
             editor.apply();
         }else if (counter == 2) {
-            Toast.makeText(AlarmMessage.this, "Snooze again" + ((min > 0) ? min + " minute" : sec + " second") + ",\nand then it'll call someone else.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AlarmMessage.this, "Snooze again " + ((min > 0) ? min + " minute" : sec + " second") + ",\nand then it'll call someone else.", Toast.LENGTH_SHORT).show();
             editor.putInt("counter", ++counter);
             editor.apply();
         }else {
-            Toast.makeText(AlarmMessage.this, "Snooze again" + ((min > 0) ? min + " minute" : sec + " second") + ",\nand then it'll call someone else.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AlarmMessage.this, "Snooze again " + ((min > 0) ? min + " minute" : sec + " second") + ",\nand then it'll call someone else.", Toast.LENGTH_SHORT).show();
             String telStr = MainActivity.PhoneNumber;
             Uri uri = Uri.parse("tel:" + telStr);
             Intent it = new Intent();

@@ -82,7 +82,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
-
         set = (Button) findViewById(R.id.set);
         delete = (Button) findViewById(R.id.delete);
         msg = (TextView) findViewById(R.id.msg);
@@ -219,7 +218,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Dialog dialog = new AlertDialog.Builder(this)
-                        .setIcon(R.drawable.ic_launcher)
+                        .setIcon(R.drawable.ic_launcher2)
                         .setTitle("Choose snooze interval")
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
@@ -287,7 +286,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             // Toast.makeText(MainActivity.this, "sys: " + System.currentTimeMillis() +  "\ncal: " +  calendar.getTimeInMillis(), Toast.LENGTH_LONG).show();
             Toast.makeText(MainActivity.this, "Alarm after " +
                     (((minute-t.minute)<0) ? (hourOfDay-t.hour-1) : (hourOfDay-t.hour)) + " hour(s) " +
-                    (((minute-t.minute)<0) ? (minute+60-t.minute) : (minute+-t.minute)) + " minute(s)" , Toast.LENGTH_SHORT).show();
+                    (((minute-t.minute)<0) ? (minute+60-t.minute) : (minute+-t.minute)) + " minute(s)" , Toast.LENGTH_LONG).show();
         }
 
     }
@@ -328,7 +327,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             PhoneNumber = data.getStringExtra("PhoneNumber");
-            Toast.makeText(this, PhoneNumber, Toast.LENGTH_LONG).show();
+            // Toast.makeText(this, PhoneNumber, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Please choose a contact person", Toast.LENGTH_SHORT).show();
         }

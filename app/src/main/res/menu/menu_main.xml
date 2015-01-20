@@ -8,8 +8,7 @@
     <item
         android:id="@+id/action_get"
         android:icon="@drawable/ic_action_action_account_box"
-        android:title="get"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
     <!--<item
         android:id="@+id/action_add"
@@ -22,6 +21,6 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="Set Snooze"
+        android:title="@string/set_snooze"
         app:showAsAction="never" />
 </menu>

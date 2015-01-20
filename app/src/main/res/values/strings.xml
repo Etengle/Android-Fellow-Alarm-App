@@ -9,7 +9,8 @@
     <string name="gcp_app_id"></string>
     <string name="add">add</string>
     <string name="no_alarm">no alarm</string>
-    <string name="set_alarm">  set alarm </string>
     <string name="delete_alarm">delete alarm</string>
+    <string name="contact">get</string>
+    <string name="set_snooze">Set Snooze</string>
 
 </resources>
