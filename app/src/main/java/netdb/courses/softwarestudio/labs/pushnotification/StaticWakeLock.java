@@ -17,7 +17,7 @@ public class StaticWakeLock {
         wl.acquire();
     }
 
-    /*public static void lockOff(Context context) {
+    public static void lockOff(Context context) {
 //		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         try {
             if (wl != null)
@@ -25,5 +25,5 @@ public class StaticWakeLock {
         } catch (Exception e) {
             //e.printStackTrace();
         }
-    }*/
+    }
 }

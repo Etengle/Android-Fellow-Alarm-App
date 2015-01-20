@@ -1,7 +1,10 @@
 package netdb.courses.softwarestudio.labs.pushnotification;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -9,6 +12,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
+import android.text.format.Time;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -70,6 +74,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private static final String FILENAME = "dom";
 
 
+    private String snoozeTime [] = new String[] { "10 sec","30 sec","1 min", "3 min", "5 min", "10 min"};
+    private String snoozeTimeinMills [] = new String[] { "10000", "30000", "60000", "180000", "300000", "600000"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,9 +95,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         time.setOnTimeChangedListener(new OnTimeChangedListenerImpl());
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.alarmsound);
-
-
-
+        calendar.setTimeInMillis(System.currentTimeMillis());
 
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
@@ -172,7 +177,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         final SharedPreferences prefs = getGCMPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
-        editor.commit();
+        editor.apply();;
     }
 
     /**
@@ -213,8 +218,26 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         // Handle the action bar items pressed
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent intent = new Intent(this, SnoozeDialog.class);
-                startActivity(intent);
+                Dialog dialog = new AlertDialog.Builder(this)
+                        .setIcon(R.drawable.ic_launcher)
+                        .setTitle("Choose snooze interval")
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setItems(snoozeTime, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                prefs = getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+                                editor = prefs.edit();
+                                editor.putInt("snoozeInteval", Integer.parseInt(snoozeTimeinMills[which]));
+                                editor.apply();
+                            }
+                        }).create();
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show() ;
                 return true;
             case R.id.action_get:
                 Intent intent2 = new Intent(this, ContactsActivity.class);
@@ -249,13 +272,22 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             editor = prefs.edit();
             Integer counter = prefs.getInt("counter", 0);
             editor.putInt("counter", 0);
-            editor.commit();
+            editor.apply();
             Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
             intent.setAction("slighten.setalarm");
+            if (calendar.getTimeInMillis() - System.currentTimeMillis() < 0) {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay+24);
+                hourOfDay+=24;
+            }
             PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-            msg.setText("Alarm time: " + hourOfDay + ":" + minute);
-            Toast.makeText(MainActivity.this, "set successfully", Toast.LENGTH_SHORT).show();
+            Time t = new Time();
+            t.setToNow();
+            msg.setText("alarm at -- " + ((hourOfDay>=24)? hourOfDay-24 : hourOfDay)  + " : " + ((minute < 10) ? "0" + minute : minute) );
+            // Toast.makeText(MainActivity.this, "sys: " + System.currentTimeMillis() +  "\ncal: " +  calendar.getTimeInMillis(), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Alarm after " +
+                    (((minute-t.minute)<0) ? (hourOfDay-t.hour-1) : (hourOfDay-t.hour)) + " hour(s) " +
+                    (((minute-t.minute)<0) ? (minute+60-t.minute) : (minute+-t.minute)) + " minute(s)" , Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -267,7 +299,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             editor = prefs.edit();
             Integer counter = prefs.getInt("counter", 0);
             editor.putInt("counter", 0);
-            editor.commit();
+            editor.apply();
                 mediaPlayer.stop();
                 // mediaPlayer.release();
                 vibrator.cancel();
