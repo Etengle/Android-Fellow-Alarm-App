@@ -1,6 +1,7 @@
 package netdb.courses.softwarestudio.labs.pushnotification;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -41,11 +42,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private final static String TAG = "MainActivity";
     private final static String SENDER_ID = "49003202870";
 
-
-    private ArrayList<User> mUserList = new ArrayList<User>();
-    private ListView mListView;
-    private UserAdapter mUserAdapter;
-
     private GoogleCloudMessaging gcm;
     static protected String regId = null;
     private Context context;
@@ -58,7 +54,13 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private int hourOfDay = 0;
     private int minute = 0;
     private Calendar calendar = Calendar.getInstance();
-    private RestManager restMgr;
+    public static final String PROPERTY_REG_ID = "registration_id";
+    public static String PhoneNumber = "0800000000";
+
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private static final String FILENAME = "dom";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +79,19 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         time.setIs24HourView(true) ;
         time.setOnTimeChangedListener(new OnTimeChangedListenerImpl());
 
-        restMgr = RestManager.getInstance(this);
 
 
 
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
-
+            regId = getRegistrationId(context);
             // TODO: Register your device
-            registerInBackground();
+            if (regId.isEmpty()) {
+                registerInBackground();
+            }
+            else{
+                Log.i(TAG, "getStoredId:" + regId);
+            }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
@@ -123,18 +129,50 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                     msg = "Device registered, registration ID=" + regId;
 
 
+                    // You may also want to store your id for later usage
+                    storeRegistrationId(context, regId);
 
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                 }
                 return msg;
             }
-
             @Override
             protected void onPostExecute(String msg) {
                 Log.i(TAG, msg);
             }
         }.execute(null, null, null);
+    }
+
+
+    private String getRegistrationId(Context context) {
+        final SharedPreferences prefs = getSharedPreferences(
+                MainActivity.class.getSimpleName(),
+                Context.MODE_PRIVATE);
+        String registrationId = prefs.getString(PROPERTY_REG_ID,
+                "");
+        if (registrationId.isEmpty()) {
+            Log.i(TAG, "Registration not found.");
+            return "";
+        }
+        return registrationId;
+    }
+
+    private void storeRegistrationId(Context context, String regId) {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_REG_ID, regId);
+        editor.commit();
+    }
+
+    /**
+     * @return Application's {@code SharedPreferences}.
+     */
+    private SharedPreferences getGCMPreferences(Context context) {
+        // This sample app persists the registration ID in shared preferences, but
+        // how you store the regID in your app is up to you.
+        return getSharedPreferences(MainActivity.class.getSimpleName(),
+                Context.MODE_PRIVATE);
     }
 
 
@@ -164,10 +202,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle the action bar items pressed
         switch (item.getItemId()) {
-            case R.id.action_add:
+            /*case R.id.action_add:
                 Intent intent = new Intent(this, PostUserActivity.class);
-                // startActivity(intent);
                 startActivity(intent);
+                return true;*/
+            case R.id.action_get:
+                Intent intent2 = new Intent(this, ContactsActivity.class);
+                // startActivity(intent);
+                startActivityForResult(intent2, ContactsActivity.REQUEST_CODE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -193,12 +235,17 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         @Override
         public void onClick(View v) {
+            prefs = getSharedPreferences(FILENAME ,Context.MODE_PRIVATE);
+            editor = prefs.edit();
+            Integer counter = prefs.getInt("counter", 0);
+            editor.putInt("counter", 0);
+            editor.commit();
             Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
             intent.setAction("slighten.setalarm");
             PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
             msg.setText("Alarm time: " + hourOfDay + ":" + minute);
-            Toast.makeText(MainActivity.this, "set successfully", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "set successfully", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -206,16 +253,31 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         @Override
         public void onClick(View v) {
+            prefs = getSharedPreferences(FILENAME ,Context.MODE_PRIVATE);
+            editor = prefs.edit();
+            Integer counter = prefs.getInt("counter", 0);
+            editor.putInt("counter", 0);
+            editor.commit();
             if (MainActivity.this.alarm != null) {
                 Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
                 intent.setAction("slighten.setalarm");
                 PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 MainActivity.this.alarm.cancel(sender);
                 MainActivity.this.msg.setText("no alarm");
-                Toast.makeText(MainActivity.this, "delete successfully", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "delete successfully", Toast.LENGTH_SHORT).show();
             }
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            PhoneNumber = data.getStringExtra("PhoneNumber");
+            // Toast.makeText(this, PhoneNumber, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "請選取一位連絡人", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

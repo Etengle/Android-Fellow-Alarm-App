@@ -9,7 +9,6 @@ import netdb.course.softwarestudio.service.rest.model.Resource;
 public class User extends Resource {
 
     private String name;
-    private String nickname;
     @Putable
     private String Id;
 
@@ -19,14 +18,6 @@ public class User extends Resource {
 
     public String getName(){
         return name;
-    }
-
-    public void setNickame(String name){
-        this.nickname = nickname;
-    }
-
-    public String getNickname(){
-        return nickname;
     }
 
     public void setId(String Id){

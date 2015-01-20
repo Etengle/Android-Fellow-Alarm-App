@@ -47,10 +47,10 @@ public class UserAdapter extends BaseAdapter{
         User user = mUserList.get(position);
 
         TextView nameTxt = (TextView) convertView.findViewById(R.id.txt_user);
-        TextView nicknameTxt = (TextView) convertView.findViewById(R.id.txt_content);
+        TextView idTxt = (TextView) convertView.findViewById(R.id.txt_content);
 
         nameTxt.setText(user.getName());
-        nicknameTxt.setText(user.getNickname());
+        idTxt.setText(user.getId());
 
         return convertView;
     }

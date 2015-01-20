@@ -8,7 +8,6 @@ import android.content.Intent;
  * Created by Slighten on 2015/1/19.
  */
 public class AlarmReceiver extends BroadcastReceiver {
-
     @Override
     public void onReceive(Context context, Intent intent) {
         StaticWakeLock.lockOn(context);

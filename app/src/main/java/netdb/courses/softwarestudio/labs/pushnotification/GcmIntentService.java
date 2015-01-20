@@ -38,7 +38,7 @@ public class GcmIntentService extends IntentService {
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
 
                 // Post notification of received message.
-                String cut = extras.toString().substring(12,36);
+                String cut = extras.toString();
                 sendNotification(cut);
                 Log.i(TAG, "通知: " + cut);
             }

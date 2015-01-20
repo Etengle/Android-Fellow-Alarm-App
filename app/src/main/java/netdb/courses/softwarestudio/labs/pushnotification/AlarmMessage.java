@@ -7,6 +7,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -17,6 +18,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 /**
  * Created by Slighten on 2015/1/19.
  */
@@ -28,10 +30,15 @@ public class AlarmMessage extends Activity {
     private AudioManager audio = null;
     private AlarmManager alarm = null;
     private Calendar calendar = Calendar.getInstance();
+    static public SharedPreferences prefs;
+    static public SharedPreferences.Editor editor;
+    private int counter;
+    private static final String FILENAME = "dom";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         audio.adjustVolume(AudioManager.ADJUST_RAISE, 0);
@@ -52,15 +59,33 @@ public class AlarmMessage extends Activity {
                 .setPositiveButton("Snooze", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        prefs = getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
+                        editor = prefs.edit();
+                        counter = prefs.getInt("counter", 0);
+
                         alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                         Intent intent = new Intent(AlarmMessage.this, AlarmReceiver.class);
                         intent.setAction("slighten.setalarm");
                         PendingIntent sender = PendingIntent.getBroadcast(AlarmMessage.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 60000, sender);
-                        Toast.makeText(AlarmMessage.this, "Snooze after 1 minute", Toast.LENGTH_LONG).show();
                         mediaPlayer.stop();
                         mediaPlayer.release();
                         vibrator.cancel();
+
+                        if (counter < 2)
+                            Toast.makeText(AlarmMessage.this, "Snooze after 1 minute", Toast.LENGTH_SHORT).show();
+                        else if (counter == 2)
+                            Toast.makeText(AlarmMessage.this, "Snooze again 1 minute,\nand then I'll call someone else.", Toast.LENGTH_SHORT).show();
+                        else {
+                            String telStr = MainActivity.PhoneNumber;
+                            Uri uri = Uri.parse("tel:" + telStr);
+                            Intent it = new Intent();
+                            it.setAction(Intent.ACTION_CALL);
+                            it.setData(uri);
+                            startActivity(it);
+                        }
+                        editor.putInt("counter", ++counter);
+                        editor.commit();
                         AlarmMessage.this.finish();
                     }
                 }).show();

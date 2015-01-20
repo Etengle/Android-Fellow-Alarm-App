@@ -7,5 +7,6 @@
 
     <!-- TODO: Add your app id -->
     <string name="gcp_app_id"></string>
+    <string name="add">add</string>
 
 </resources>

@@ -53,7 +53,6 @@ public class PostUserActivity extends Activity {
     private void postUser(String name, String nickname) {
         final User user = new User();
         user.setName(name);
-        user.setNickame(nickname);
         user.setId(MainActivity.regId);
 
         mRestMgr.postResource(User.class, user, new RestManager.PostResourceListener() {
