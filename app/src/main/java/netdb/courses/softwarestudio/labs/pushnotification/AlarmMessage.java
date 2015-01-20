@@ -17,6 +17,7 @@ import java.util.Calendar;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.content.SharedPreferences;
 /**
@@ -29,6 +30,7 @@ public class AlarmMessage extends Activity {
     private Vibrator vibrator;
     private AudioManager audio = null;
     private AlarmManager alarm = null;
+    private TextView msg = null;
     private Calendar calendar = Calendar.getInstance();
     static public SharedPreferences prefs;
     static public SharedPreferences.Editor editor;
@@ -38,7 +40,7 @@ public class AlarmMessage extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        msg = (TextView) findViewById(R.id.msg);
         audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
         audio.adjustVolume(AudioManager.ADJUST_RAISE, 0);
@@ -68,6 +70,7 @@ public class AlarmMessage extends Activity {
                         intent.setAction("slighten.setalarm");
                         PendingIntent sender = PendingIntent.getBroadcast(AlarmMessage.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                         alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 60000, sender);
+                        // msg.setText("Alarm time: " + calendar.get + ":" + calendar.MINUTE+1);
                         mediaPlayer.stop();
                         mediaPlayer.release();
                         vibrator.cancel();
