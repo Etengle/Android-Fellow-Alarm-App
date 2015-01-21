@@ -416,6 +416,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         prefs = getSharedPreferences(FILENAME ,Context.MODE_PRIVATE);
         int counter = prefs.getInt("counter", 0);
         if (counter >= 3)
-            delete.setText("DELETE");
+            delete.setText("DLELTE ALARM");
     }
 }
