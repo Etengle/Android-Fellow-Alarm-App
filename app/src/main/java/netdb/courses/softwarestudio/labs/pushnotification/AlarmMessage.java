@@ -125,11 +125,11 @@ public class AlarmMessage extends ActionBarActivity {
         int min = snoozeIntevalinMills/ONEMIN;
         int sec = (snoozeIntevalinMills%ONEMIN) / ONESEC;
         if (counter < 2) {
-            Toast.makeText(AlarmMessage.this, "Snooze after " + ((min > 0) ? min + " minute" : sec + " second"), Toast.LENGTH_SHORT).show();
+            Toast.makeText(AlarmMessage.this, "Snooze after " + ((min > 0) ? ((min == 1) ? min + " minite": min + " minutes") : sec + " seconds"), Toast.LENGTH_SHORT).show();
             editor.putInt("counter", ++counter);
             editor.apply();
         }else if (counter == 2) {
-            Toast.makeText(AlarmMessage.this, "Snooze again " + ((min > 0) ? min + " minute" : sec + " second") + ".\nNext time I'll call someone else.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AlarmMessage.this, "Snooze again " + ((min > 0) ? ((min == 1) ? min + " minite": min + " minutes") : sec + " seconds") + ".\nNext time I'll call someone else.", Toast.LENGTH_SHORT).show();
             msg.setText("DELETE ALARM");
             editor.putInt("counter", ++counter);
             editor.apply();

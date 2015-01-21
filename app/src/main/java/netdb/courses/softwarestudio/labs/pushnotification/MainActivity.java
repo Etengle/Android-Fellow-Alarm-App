@@ -294,6 +294,24 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 // dialog2.setCanceledOnTouchOutside(false);
                 dialog2.show();
                 return true;
+            case R.id.action_help:
+                Dialog dialog3;
+                dialog3 = new AlertDialog.Builder(this)
+                        .setIcon(R.drawable.ic_launcher3)
+                        .setTitle("Help")
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setMessage("This app is a special alarm app." +
+                                "\nWhen you snooze over 3 times constantly, " +
+                                "it will CALL somebody else automatically " +
+                                "\nin case OVERSLEPT.").create();
+                // dialog3.setCanceledOnTouchOutside(false);
+                dialog3.show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

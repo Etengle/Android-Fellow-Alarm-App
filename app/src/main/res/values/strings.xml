@@ -11,7 +11,7 @@
     <string name="no_alarm">Currently no alarm</string>
     <string name="delete_alarm">delete alarm</string>
     <string name="contact">get</string>
-    <string name="set_snooze">Set Snooze</string>
+    <string name="set_snooze">Set snooze</string>
     <string name="now">Now: </string>
     <string name="settime">Set alarm time:</string>
     <string name="title_activity_add_number">AddNumberActivity</string>
@@ -19,5 +19,6 @@
     <string name="check">Check</string>
     <string name="contacts">Contacts</string>
     <string name="set_alarm">set alarm</string>
+    <string name="help">Help</string>
 
 </resources>
