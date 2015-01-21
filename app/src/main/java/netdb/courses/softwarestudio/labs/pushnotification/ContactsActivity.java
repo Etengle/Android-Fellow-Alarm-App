@@ -147,7 +147,7 @@ public class ContactsActivity extends ActionBarActivity {
         Cursor c = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null, phoneSelection, phoneSelectionArgs, null);
         StringBuffer buf = new StringBuffer();
-        buf.append("You just chose: " + allContacts.get(position).get("name") + "\nHis/Her number is: ");
+        buf.append("You just chose: ").append(allContacts.get(position).get("name")).append("\nHis/Her number is: ");
                 /*for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext())
                     buf.append(c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.
                             NUMBER))).append(", ");*/
