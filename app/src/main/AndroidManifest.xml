@@ -3,6 +3,7 @@
     package="netdb.courses.softwarestudio.labs.pushnotification"
     android:versionCode="4"
     android:versionName="1.3" >
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
@@ -11,8 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITER_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -27,40 +27,48 @@
     <permission
         android:name="netdb.courses.softwarestudio.labs.pushnotification.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="netdb.courses.softwarestudio.labs.pushnotification.permission.C2D_MESSAGE" />
+
+    <android:uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher2"
-        android:logo="@drawable/ic_launcher2"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-        <meta-data android:name="com.google.android.gms.version"
+        android:logo="@drawable/ic_launcher2"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity android:name=".AlarmMessage" />
 
         <!-- TODO: register receiver -->
         <receiver
             android:name=".GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
-        <intent-filter>
-            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            <category android:name="netdb.courses.ss.test" />
-        </intent-filter>
-        </receiver>
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
-        <receiver android:name=".AlarmReceiver" android:enabled="true">
+                <category android:name="netdb.courses.ss.test" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true" >
             <intent-filter>
                 <action android:name="slighten.setalarm" />
             </intent-filter>
@@ -77,7 +85,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".UserListActivity"
             android:label="slighten.userlist"
@@ -86,7 +93,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".ContactsActivity"
             android:label="Contacts list"
@@ -94,6 +100,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".AddNumberActivity"
+            android:label="@string/title_activity_add_number" >
         </activity>
     </application>
 

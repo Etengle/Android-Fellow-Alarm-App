@@ -246,6 +246,12 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 return true;
             case R.id.action_check:
                 Toast.makeText(this, "Chosen phone number: " + PhoneNumber, Toast.LENGTH_SHORT).show();
+            case R.id.action_add:
+
+                Intent intent3 = new Intent(this, AddNumberActivity.class);
+                Toast.makeText(getApplicationContext(),"Add number to call",Toast.LENGTH_SHORT).show();
+                startActivityForResult(intent3, AddNumberActivity.REQUEST_CODE);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
