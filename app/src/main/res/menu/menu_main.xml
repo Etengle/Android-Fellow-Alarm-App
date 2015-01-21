@@ -5,16 +5,24 @@
 
 
 
+
     <item
         android:id="@+id/action_get"
         android:icon="@drawable/ic_action_action_account_box"
+        android:title="Contacts"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_check"
         android:icon="@drawable/ic_action_communication_live_help"
+        android:title="Check"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/ic_action_content_add"
+        android:title="Add phone number"
+        app:showAsAction="ifRoom"/>
     <!--<item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_content_add_circle_outline"

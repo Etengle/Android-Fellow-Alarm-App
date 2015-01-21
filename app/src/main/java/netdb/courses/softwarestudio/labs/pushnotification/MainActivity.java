@@ -26,11 +26,13 @@ import java.util.Calendar;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
@@ -61,6 +63,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private AlarmManager alarm = null;
     private Button set = null;
     private Button delete = null;
+
     private TextView msg = null;
     private TimePicker time = null;
     private int hourOfDay = 0;
@@ -218,7 +221,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         // Handle the action bar items pressed
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Dialog dialog = new AlertDialog.Builder(this)
+                Dialog dialog;
+                dialog = new AlertDialog.Builder(this)
                         .setIcon(R.drawable.ic_launcher2)
                         .setTitle("Choose snooze interval")
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -237,7 +241,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                             }
                         }).create();
                 dialog.setCanceledOnTouchOutside(false);
-                dialog.show() ;
+                dialog.show();
                 return true;
             case R.id.action_get:
                 Intent intent2 = new Intent(this, ContactsActivity.class);
@@ -246,6 +250,36 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 return true;
             case R.id.action_check:
                 Toast.makeText(this, "Chosen phone number: " + PhoneNumber, Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_add:
+                LayoutInflater factory = LayoutInflater.from(this);
+                View myView = factory.inflate(R.layout.phone_dialog, null);
+
+                Dialog dialog2 = new Dialog(this);
+                /*dialog2.setContentView(R.layout.phone_dialog);*/
+                final EditText edt = (EditText) myView.findViewById(R.id.editText3);
+                dialog2 = new AlertDialog.Builder(this)
+                        .setIcon(R.drawable.ic_launcher2)
+                        .setTitle("Add phone number")
+                        .setView(myView)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PhoneNumber = edt.getText().toString();
+                                Toast.makeText(MainActivity.this, "Chosen phone number: " + PhoneNumber, Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }).create();
+
+                // dialog2.setCanceledOnTouchOutside(false);
+                dialog2.show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
