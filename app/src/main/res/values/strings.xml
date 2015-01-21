@@ -6,9 +6,9 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Add your app id -->
-    <string name="gcp_app_id"></string>
+    <string name="gcp_app_id">0</string>
     <string name="add">add</string>
-    <string name="no_alarm">no alarm</string>
+    <string name="no_alarm">Currently no alarm</string>
     <string name="delete_alarm">delete alarm</string>
     <string name="contact">get</string>
     <string name="set_snooze">Set Snooze</string>
@@ -18,5 +18,6 @@
     <string name="add_phone">Add phone number</string>
     <string name="check">Check</string>
     <string name="contacts">Contacts</string>
+    <string name="set_alarm">set alarm</string>
 
 </resources>

@@ -58,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_weight="0.5"
         android:layout_height="wrap_content"
-        android:text="  set alarm " />
+        android:text="@string/set_alarm" />
     <Button
         android:id="@+id/delete"
         android:layout_width="wrap_content"

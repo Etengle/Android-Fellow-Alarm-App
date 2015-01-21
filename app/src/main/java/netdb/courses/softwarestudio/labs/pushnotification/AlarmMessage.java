@@ -4,7 +4,7 @@ package netdb.courses.softwarestudio.labs.pushnotification;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.app.Activity;
+// import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -16,13 +16,14 @@ import android.content.Context;
 import android.os.Vibrator;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Random;
+// import java.util.Random;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
+// import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.SharedPreferences;
@@ -37,7 +38,7 @@ public class AlarmMessage extends ActionBarActivity {
     private AudioManager audio = null;
     protected static AlarmManager alarm = null;
     private TextView msg = null;
-    private Calendar calendar = Calendar.getInstance();
+    // private Calendar calendar = Calendar.getInstance();
     static public SharedPreferences prefs;
     static public SharedPreferences.Editor editor;
     private int counter;
@@ -73,7 +74,7 @@ public class AlarmMessage extends ActionBarActivity {
         vibrator.vibrate(new long[] { 0,  ((int)(Math.random()*30)+1)*100, ((int)(Math.random()*5)+1)*100 , ((int)(Math.random()*30)+1)*100}, 0);
         Dialog dialog = new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher3).setTitle("Times up!")
                 .setMessage(new SimpleDateFormat("'Now it is' K : mm : ss a '!!'", Locale.ENGLISH)
-                .format(new Date(System.currentTimeMillis())))
+                        .format(new Date(System.currentTimeMillis())))
                 .setPositiveButton("Snooze", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -88,14 +89,23 @@ public class AlarmMessage extends ActionBarActivity {
             public boolean onKey(DialogInterface arg0, int keyCode,
                                  KeyEvent event) {
                 // TODO Auto-generated method
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME) {
+                    // cancelAlarm();
+                }
+                if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP){
                     cancelAlarm();
                 }
                 return true;
             }
         });
     }
-
+/*
+    @Override
+    public void onAttachedToWindow() {
+        this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
+        super.onAttachedToWindow();
+    }
+*/
     private void cancelAlarm(){
         editor = prefs.edit();
         snoozeIntevalinMills = prefs.getInt("snoozeInteval", 0);
@@ -105,7 +115,7 @@ public class AlarmMessage extends ActionBarActivity {
         Intent intent = new Intent(AlarmMessage.this, AlarmReceiver.class);
         intent.setAction("slighten.setalarm");
         PendingIntent sender = PendingIntent.getBroadcast(AlarmMessage.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + snoozeIntevalinMills, sender);
+        alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + snoozeIntevalinMills, sender);
         // msg.setText("Alarm time: " + calendar.get + ":" + calendar.MINUTE+1);
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
@@ -154,6 +164,7 @@ public class AlarmMessage extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         StaticWakeLock.lockOff(context);
+        // cancelAlarm();
         // cancelAlarm();
     }
 }

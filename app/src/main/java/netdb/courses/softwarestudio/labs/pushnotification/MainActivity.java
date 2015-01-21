@@ -2,7 +2,7 @@ package netdb.courses.softwarestudio.labs.pushnotification;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
+// import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -11,7 +11,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
-import android.text.format.DateFormat;
+import android.text.TextUtils;
+// import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -39,12 +40,12 @@ import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
 
 
-import netdb.course.softwarestudio.service.rest.RestManager;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import android.widget.ListView;
+// import netdb.course.softwarestudio.service.rest.RestManager;
+// import java.util.ArrayList;
+// import java.util.HashMap;
+// import java.util.List;
+// import java.util.Map;
+// import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -99,6 +100,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.alarmsound);
         calendar.setTimeInMillis(System.currentTimeMillis());
+
+        Time t = new Time();
+        t.setToNow();
+        hourOfDay = t.hour;
+        minute = t.minute;
 
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
@@ -255,7 +261,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 LayoutInflater factory = LayoutInflater.from(this);
                 View myView = factory.inflate(R.layout.phone_dialog, null);
 
-                Dialog dialog2;
+                final Dialog dialog2;
                 /*dialog2.setContentView(R.layout.phone_dialog);*/
                 final EditText edt = (EditText) myView.findViewById(R.id.editText3);
                 dialog2 = new AlertDialog.Builder(this)
@@ -266,8 +272,16 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                PhoneNumber = edt.getText().toString();
-                                Toast.makeText(MainActivity.this, "Chosen phone number: " + PhoneNumber, Toast.LENGTH_SHORT).show();
+                                String text = edt.getText().toString();
+                                if(TextUtils.isEmpty(text)) {
+                                    edt.setError("This field cannot be empty");
+                                    Toast.makeText(MainActivity.this, "You should add a phone number before click OK.", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    PhoneNumber = text;
+                                    Toast.makeText(MainActivity.this, "Added phone number: " + PhoneNumber, Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -306,7 +320,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         public void onClick(View v) {
             prefs = getSharedPreferences(FILENAME ,Context.MODE_PRIVATE);
             editor = prefs.edit();
-            int counter = prefs.getInt("counter", 0);
+            // int counter = prefs.getInt("counter", 0);
             editor.putInt("counter", 0);
             editor.apply();
             Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
@@ -323,9 +337,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
             msg.setText("alarm at -- " + ((hourOfDay>=24)? hourOfDay-24 : hourOfDay)  + " : " + ((minute < 10) ? "0" + minute : minute) );
             // Toast.makeText(MainActivity.this, "sys: " + System.currentTimeMillis() +  "\ncal: " +  calendar.getTimeInMillis(), Toast.LENGTH_LONG).show();
-            Toast.makeText(MainActivity.this, "Alarm after " +
-                    (((minute-t.minute)<0) ? (hourOfDay-t.hour-1) : (hourOfDay-t.hour)) + " hour(s) " +
-                    (((minute-t.minute)<0) ? (minute+60-t.minute) : (minute+-t.minute)) + " minute(s)" , Toast.LENGTH_LONG).show();
+            int diffhour = (minute-t.minute)<0 ? (hourOfDay-t.hour-1) : (hourOfDay-t.hour);
+            int diffmin = (minute-t.minute)<0 ? (minute+60-t.minute) : (minute+-t.minute);
+            if (diffhour != 0 || diffmin != 0)
+                Toast.makeText(MainActivity.this, "Alarm after " +
+                    (diffhour <= 1 ? (diffhour == 0 ? "" : diffhour + " hour ") : diffhour + " hours ") +
+                    (diffmin <= 1 ? (diffmin == 0 ? "" :diffmin + " minute")  : diffmin + " minutes") , Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(MainActivity.this, "Alarm right away", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -335,7 +354,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         public void onClick(View v) {
             prefs = getSharedPreferences(FILENAME ,Context.MODE_PRIVATE);
             editor = prefs.edit();
-            Integer counter = prefs.getInt("counter", 0);
+            // Integer counter = prefs.getInt("counter", 0);
             editor.putInt("counter", 0);
             editor.apply();
                 mediaPlayer.stop();
@@ -347,14 +366,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 intent.setAction("slighten.setalarm");
                 PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 AlarmMessage.alarm.cancel(sender);
-                MainActivity.this.msg.setText("no alarm");
+                MainActivity.this.msg.setText("Currently no alarm");
             }
             if (MainActivity.this.alarm != null) {
                 Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
                 intent.setAction("slighten.setalarm");
                 PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 MainActivity.this.alarm.cancel(sender);
-                MainActivity.this.msg.setText("no alarm");
+                MainActivity.this.msg.setText("Currently no alarm");
                 Toast.makeText(MainActivity.this, "delete successfully", Toast.LENGTH_SHORT).show();
             }
             delete.setText("delete alarm");

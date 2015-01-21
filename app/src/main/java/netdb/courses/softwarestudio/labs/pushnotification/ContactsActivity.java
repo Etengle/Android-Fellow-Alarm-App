@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
+//import android.app.Activity;
+//import android.content.DialogInterface;
+//import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
-import android.view.ContextMenu;
+//import android.view.ContextMenu;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,7 +81,6 @@ public class ContactsActivity extends ActionBarActivity {
                                            int position, long id) {
                 //if (PhoneNumber.equals("0"))
                 StringBuffer buf = getNumber(position);
-                buf = getNumber(position);
                 Toast.makeText(ContactsActivity.this, buf, Toast.LENGTH_SHORT).show();
                 finishActivity();
                 return true;
@@ -130,7 +129,7 @@ public class ContactsActivity extends ActionBarActivity {
                 // int position = (int) (Math.random() % allContacts.size());
                 // Toast.makeText(ContactsActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                 getNumber(position);
-                Toast.makeText(ContactsActivity.this, "You just chose: " + PhoneNumber, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(ContactsActivity.this, "You just chose: " + PhoneNumber, Toast.LENGTH_SHORT).show();
                 finishActivity();
                 return true;
             default:
