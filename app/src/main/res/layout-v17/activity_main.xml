@@ -17,13 +17,23 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="187dp" />-->
-
+    <TextView
+        android:id="@+id/now"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="@string/now"/>
     <AnalogClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/analogClock"
         android:layout_gravity="center_horizontal" />
-
+    <TextView
+        android:id="@+id/setala"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="@string/settime"/>
     <TimePicker
         android:id="@+id/time"
         android:layout_width="fill_parent"

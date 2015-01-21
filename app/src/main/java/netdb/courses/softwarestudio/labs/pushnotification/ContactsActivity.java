@@ -70,7 +70,9 @@ public class ContactsActivity extends ActionBarActivity {
         contactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View itemClicked, int
                     position, long id) {
-                getNumber(position);
+                StringBuffer buf = getNumber(position);
+                buf.append("\nLong press to confirm.");
+                Toast.makeText(ContactsActivity.this, buf, Toast.LENGTH_SHORT).show();
             }
         });
         contactsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -78,7 +80,9 @@ public class ContactsActivity extends ActionBarActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View itemClicked,
                                            int position, long id) {
                 //if (PhoneNumber.equals("0"))
-                getNumber(position);
+                StringBuffer buf = getNumber(position);
+                buf = getNumber(position);
+                Toast.makeText(ContactsActivity.this, buf, Toast.LENGTH_SHORT).show();
                 finishActivity();
                 return true;
             }
@@ -126,6 +130,7 @@ public class ContactsActivity extends ActionBarActivity {
                 // int position = (int) (Math.random() % allContacts.size());
                 // Toast.makeText(ContactsActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                 getNumber(position);
+                Toast.makeText(ContactsActivity.this, "You just chose: " + PhoneNumber, Toast.LENGTH_SHORT).show();
                 finishActivity();
                 return true;
             default:
@@ -134,7 +139,7 @@ public class ContactsActivity extends ActionBarActivity {
 
     }
 
-    private void getNumber(int position){
+    private StringBuffer getNumber(int position){
         Long contactsId = Long.parseLong(allContacts.get(position).get("_id").toString());
 
         String phoneSelection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?";
@@ -149,7 +154,8 @@ public class ContactsActivity extends ActionBarActivity {
         c.moveToFirst();
         PhoneNumber = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
         buf.append(PhoneNumber);
-        Toast.makeText(ContactsActivity.this, buf, Toast.LENGTH_SHORT).show();
+        return buf;
+
     }
 
     private void finishActivity(){

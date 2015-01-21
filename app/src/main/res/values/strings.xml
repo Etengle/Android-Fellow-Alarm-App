@@ -12,5 +12,7 @@
     <string name="delete_alarm">delete alarm</string>
     <string name="contact">get</string>
     <string name="set_snooze">Set Snooze</string>
+    <string name="now">Now: </string>
+    <string name="settime">Set alarm time:</string>
 
 </resources>

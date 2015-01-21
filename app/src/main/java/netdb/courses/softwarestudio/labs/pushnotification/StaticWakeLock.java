@@ -13,7 +13,7 @@ public class StaticWakeLock {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         //Object flags;
         if (wl == null)
-            wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "alarm");
+            wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "alarm");
         wl.acquire();
     }
 

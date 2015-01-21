@@ -47,8 +47,9 @@ public class AlarmMessage extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        msg = (TextView) findViewById(R.id.msg);
-        // setContentView(R.layout.activity_main);
+
+        setContentView(R.layout.activity_main);
+        msg = (TextView) findViewById(R.id.delete);
         prefs = getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
         counter = prefs.getInt("counter", 0);
 
@@ -69,8 +70,8 @@ public class AlarmMessage extends ActionBarActivity {
         mediaPlayer.start();
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         vibrator.vibrate(new long[] { 0,  ((int)(Math.random()*30)+1)*100, ((int)(Math.random()*5)+1)*100 , ((int)(Math.random()*30)+1)*100}, 0);
-        Dialog dialog = new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setTitle("時間到囉!")
-                .setMessage(new SimpleDateFormat("現在是aaa H 點 mm 分 ss 秒")
+        Dialog dialog = new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setTitle("Times up!")
+                .setMessage(new SimpleDateFormat("'Now it is' aaa HH:mm:ss '!!'")
                         .format(new Date(System.currentTimeMillis())))
                 .setPositiveButton("Snooze", new DialogInterface.OnClickListener() {
                     @Override
@@ -85,7 +86,7 @@ public class AlarmMessage extends ActionBarActivity {
             @Override
             public boolean onKey(DialogInterface arg0, int keyCode,
                                  KeyEvent event) {
-                // TODO Auto-generated method stub
+                // TODO Auto-generated method
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
                     cancelAlarm();
                 }
@@ -117,19 +118,22 @@ public class AlarmMessage extends ActionBarActivity {
             editor.putInt("counter", ++counter);
             editor.apply();
         }else if (counter == 2) {
-            Toast.makeText(AlarmMessage.this, "Snooze again " + ((min > 0) ? min + " minute" : sec + " second") + ",\nand then it'll call someone else.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AlarmMessage.this, "Snooze again " + ((min > 0) ? min + " minute" : sec + " second") + ".\nNext time I'll call someone else.", Toast.LENGTH_SHORT).show();
+            msg.setText("DELETE ALARM");
             editor.putInt("counter", ++counter);
             editor.apply();
         }else {
-            Toast.makeText(AlarmMessage.this, "Snooze again " + ((min > 0) ? min + " minute" : sec + " second") + ",\nand then it'll call someone else.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AlarmMessage.this, "I'm calling !!!", Toast.LENGTH_SHORT).show();
             String telStr = MainActivity.PhoneNumber;
             Uri uri = Uri.parse("tel:" + telStr);
             Intent it = new Intent();
             it.setAction(Intent.ACTION_CALL);
             it.setData(uri);
             startActivity(it);
+            msg.setText("DELETE ALARM");
+            Toast.makeText(AlarmMessage.this, "To delete snooze, click \"DELETE ALARM\" button on main screen.", Toast.LENGTH_SHORT).show();
         }
-
+        StaticWakeLock.lockOff(context);
         AlarmMessage.this.finish();
     }
 
@@ -148,6 +152,7 @@ public class AlarmMessage extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        StaticWakeLock.lockOff(context);
         // cancelAlarm();
     }
 }

@@ -80,6 +80,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         context = this;
         set = (Button) findViewById(R.id.set);
@@ -274,14 +275,16 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             editor.apply();
             Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
             intent.setAction("slighten.setalarm");
-            if (calendar.getTimeInMillis() - System.currentTimeMillis() < 0) {
+            Time t = new Time();
+            t.setToNow();
+            if (calendar.getTimeInMillis() - System.currentTimeMillis() < 0 &&
+                    !(hourOfDay == t.hour && minute == t.minute)) {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay+24);
                 hourOfDay+=24;
             }
             PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-            Time t = new Time();
-            t.setToNow();
+
             msg.setText("alarm at -- " + ((hourOfDay>=24)? hourOfDay-24 : hourOfDay)  + " : " + ((minute < 10) ? "0" + minute : minute) );
             // Toast.makeText(MainActivity.this, "sys: " + System.currentTimeMillis() +  "\ncal: " +  calendar.getTimeInMillis(), Toast.LENGTH_LONG).show();
             Toast.makeText(MainActivity.this, "Alarm after " +
@@ -318,6 +321,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 MainActivity.this.msg.setText("no alarm");
                 Toast.makeText(MainActivity.this, "delete successfully", Toast.LENGTH_SHORT).show();
             }
+            delete.setText("delete alarm");
 
         }
 
@@ -333,4 +337,12 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        prefs = getSharedPreferences(FILENAME ,Context.MODE_PRIVATE);
+        int counter = prefs.getInt("counter", 0);
+        if (counter >= 3)
+            delete.setText("DLELTE ALARM");
+    }
 }
