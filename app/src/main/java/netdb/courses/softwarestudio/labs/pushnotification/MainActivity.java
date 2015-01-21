@@ -305,10 +305,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         })
-                        .setMessage("This app is a special alarm app." +
+                        .setMessage("This is a special alarm app." +
                                 "\nWhen you snooze over 3 times constantly, " +
                                 "it will CALL somebody else automatically " +
-                                "\nin case OVERSLEPT.").create();
+                                "\npreventing you from OVERSLEEPING.").create();
                 // dialog3.setCanceledOnTouchOutside(false);
                 dialog3.show();
                 return true;
