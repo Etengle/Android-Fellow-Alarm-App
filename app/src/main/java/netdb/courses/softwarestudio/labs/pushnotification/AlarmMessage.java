@@ -130,7 +130,7 @@ public class AlarmMessage extends ActionBarActivity {
             editor.apply();
         }else if (counter == 2) {
             Toast.makeText(AlarmMessage.this, "Snooze again " + ((min > 0) ? ((min == 1) ? min + " minite": min + " minutes") : sec + " seconds") + ".\nNext time I'll call someone else.", Toast.LENGTH_SHORT).show();
-            msg.setText("DELETE ALARM");
+            msg.setText("DELETE");
             editor.putInt("counter", ++counter);
             editor.apply();
         }else {
@@ -142,7 +142,7 @@ public class AlarmMessage extends ActionBarActivity {
             it.setData(uri);
             startActivity(it);
             msg.setText("DELETE ALARM");
-            Toast.makeText(AlarmMessage.this, "To delete snooze, click \"DELETE ALARM\" button on main screen.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AlarmMessage.this, "To delete snooze, click \"DELETE\" button on main screen.", Toast.LENGTH_SHORT).show();
         }
         // StaticWakeLock.lockOff(context);
         AlarmMessage.this.finish();
