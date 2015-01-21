@@ -144,7 +144,7 @@ public class AlarmMessage extends ActionBarActivity {
             msg.setText("DELETE ALARM");
             Toast.makeText(AlarmMessage.this, "To delete snooze, click \"DELETE ALARM\" button on main screen.", Toast.LENGTH_SHORT).show();
         }
-        StaticWakeLock.lockOff(context);
+        // StaticWakeLock.lockOff(context);
         AlarmMessage.this.finish();
     }
 
@@ -163,7 +163,7 @@ public class AlarmMessage extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        StaticWakeLock.lockOff(context);
+        // StaticWakeLock.lockOff(context);
         // cancelAlarm();
         // cancelAlarm();
     }

@@ -20,5 +20,6 @@
     <string name="contacts">Contacts</string>
     <string name="set_alarm">set alarm</string>
     <string name="help">Help</string>
+    <string name="typephonemsg">Type someone\'s phone number.</string>
 
 </resources>
