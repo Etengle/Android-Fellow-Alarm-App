@@ -43,8 +43,8 @@
     <TimePicker
         android:id="@+id/time"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:focusableInTouchMode="false" />
+        android:layout_height="wrap_content"/>
+    <!--android:focusableInTouchMode="false"-->
     <TextView
         android:id="@+id/msg"
         android:layout_width="fill_parent"
@@ -52,26 +52,28 @@
         android:textSize="25sp"
         android:text="@string/no_alarm"/>
 
-    <TableLayout
+   <!-- <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:stretchColumns="1">
 
-        <TableRow>
+        <TableRow>-->
             <Button
                 android:id="@+id/set"
-                android:layout_width="0dip"
-                android:layout_weight="1"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/set_alarm" />
+    <!--android:layout_width="0dip"-->
+    <!--android:layout_weight="1"-->
             <Button
                 android:id="@+id/delete"
-                android:layout_width="0dip"
-                android:layout_weight="1"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/delete_alarm" />
-        </TableRow>
-    </TableLayout>
+    <!--android:layout_width="0dip"-->
+    <!--android:layout_weight="1"-->
+    <!--  </TableRow>
+  </TableLayout>-->
 
 
 
