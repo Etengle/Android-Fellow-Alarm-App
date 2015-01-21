@@ -33,7 +33,7 @@
         android:id="@+id/setala"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="@dimen/fonts25"
         android:text="@string/settime"/>
 
     <TimePicker

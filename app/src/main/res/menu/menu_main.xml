@@ -10,6 +10,11 @@
         android:icon="@drawable/ic_action_action_account_box"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/action_check"
+        android:icon="@drawable/ic_action_communication_live_help"
+        app:showAsAction="ifRoom"/>
+
     <!--<item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_content_add_circle_outline"

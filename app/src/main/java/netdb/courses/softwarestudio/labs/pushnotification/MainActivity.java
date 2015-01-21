@@ -177,7 +177,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         final SharedPreferences prefs = getGCMPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
-        editor.apply();;
+        editor.apply();
     }
 
     /**
@@ -244,6 +244,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 // startActivity(intent);
                 startActivityForResult(intent2, ContactsActivity.REQUEST_CODE);
                 return true;
+            case R.id.action_check:
+                Toast.makeText(this, "Chosen phone number: " + PhoneNumber, Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -270,7 +272,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         public void onClick(View v) {
             prefs = getSharedPreferences(FILENAME ,Context.MODE_PRIVATE);
             editor = prefs.edit();
-            Integer counter = prefs.getInt("counter", 0);
+            int counter = prefs.getInt("counter", 0);
             editor.putInt("counter", 0);
             editor.apply();
             Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
