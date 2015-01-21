@@ -1,3 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -51,28 +55,25 @@
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="0,1">
-    <TableRow>
-    <Button
-        android:id="@+id/set"
-        android:layout_width="wrap_content"
-        android:layout_weight="0.5"
-        android:layout_height="wrap_content"
-        android:text="@string/set_alarm" />
-    <Button
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_weight="0.5"
-        android:layout_height="wrap_content"
-        android:text="@string/delete_alarm" />
-    </TableRow>
+        android:stretchColumns="1">
+
+        <TableRow>
+            <Button
+                android:id="@+id/set"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/set_alarm" />
+            <Button
+                android:id="@+id/delete"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_alarm" />
+        </TableRow>
     </TableLayout>
 
-    <!--<AnalogClock
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/analogClock2"
-        android:layout_gravity="center_horizontal" />-->
 
 
 </LinearLayout>
+</ScrollView>
