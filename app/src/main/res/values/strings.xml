@@ -14,5 +14,6 @@
     <string name="set_snooze">Set Snooze</string>
     <string name="now">Now: </string>
     <string name="settime">Set alarm time:</string>
+    <string name="title_activity_add_number">AddNumberActivity</string>
 
 </resources>

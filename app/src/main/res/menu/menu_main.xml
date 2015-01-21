@@ -28,6 +28,12 @@
         android:icon="@drawable/ic_action_content_add_circle_outline"
         android:title="@string/add"
         app:showAsAction="never"/>-->
+    <item
+
+        android:id="@+id/action_add"
+        android:icon="@drawable/ic_action_content_add_circle_outline"
+        android:title="Add Number"
+        app:showAsAction="always"/>
 
 
 
