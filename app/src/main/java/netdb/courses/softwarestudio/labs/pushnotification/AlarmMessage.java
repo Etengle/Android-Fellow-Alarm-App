@@ -15,6 +15,7 @@ import android.media.MediaPlayer;
 import android.content.Context;
 import android.os.Vibrator;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Random;
 
 import android.app.AlarmManager;
@@ -70,9 +71,9 @@ public class AlarmMessage extends ActionBarActivity {
         mediaPlayer.start();
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         vibrator.vibrate(new long[] { 0,  ((int)(Math.random()*30)+1)*100, ((int)(Math.random()*5)+1)*100 , ((int)(Math.random()*30)+1)*100}, 0);
-        Dialog dialog = new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher).setTitle("Times up!")
-                .setMessage(new SimpleDateFormat("'Now it is' aaa HH:mm:ss '!!'")
-                        .format(new Date(System.currentTimeMillis())))
+        Dialog dialog = new AlertDialog.Builder(this).setIcon(R.drawable.ic_launcher3).setTitle("Times up!")
+                .setMessage(new SimpleDateFormat("'Now it is' K : mm : ss a '!!'", Locale.ENGLISH)
+                .format(new Date(System.currentTimeMillis())))
                 .setPositiveButton("Snooze", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

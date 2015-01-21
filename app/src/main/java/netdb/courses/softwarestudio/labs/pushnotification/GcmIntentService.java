@@ -57,7 +57,7 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher) // You can use you custom icon
+                        .setSmallIcon(R.drawable.ic_launcher3) // You can use you custom icon
                         .setContentTitle("鬧鈴提醒")
                         .setContentText(msg);
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

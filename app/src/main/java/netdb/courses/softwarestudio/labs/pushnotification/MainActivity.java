@@ -223,7 +223,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             case R.id.action_settings:
                 Dialog dialog;
                 dialog = new AlertDialog.Builder(this)
-                        .setIcon(R.drawable.ic_launcher2)
+                        .setIcon(R.drawable.ic_launcher3)
                         .setTitle("Choose snooze interval")
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
@@ -255,11 +255,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 LayoutInflater factory = LayoutInflater.from(this);
                 View myView = factory.inflate(R.layout.phone_dialog, null);
 
-                Dialog dialog2 = new Dialog(this);
+                Dialog dialog2;
                 /*dialog2.setContentView(R.layout.phone_dialog);*/
                 final EditText edt = (EditText) myView.findViewById(R.id.editText3);
                 dialog2 = new AlertDialog.Builder(this)
-                        .setIcon(R.drawable.ic_launcher2)
+                        .setIcon(R.drawable.ic_launcher3)
                         .setTitle("Add phone number")
                         .setView(myView)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {

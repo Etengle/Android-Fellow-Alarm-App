@@ -9,31 +9,25 @@
     <item
         android:id="@+id/action_get"
         android:icon="@drawable/ic_action_action_account_box"
-        android:title="Contacts"
+        android:title="@string/contacts"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_check"
         android:icon="@drawable/ic_action_communication_live_help"
-        android:title="Check"
+        android:title="@string/check"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_content_add"
-        android:title="Add phone number"
+        android:title="@string/add_phone"
         app:showAsAction="ifRoom"/>
     <!--<item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_action_content_add_circle_outline"
         android:title="@string/add"
         app:showAsAction="never"/>-->
-    <item
-
-        android:id="@+id/action_add"
-        android:icon="@drawable/ic_action_content_add_circle_outline"
-        android:title="Add Number"
-        app:showAsAction="always"/>
 
 
 
