@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Final_Project.iml" filepath="$PROJECT_DIR$/Final_Project.iml" />
       <module fileurl="file://$PROJECT_DIR$/Final_Project_FellowAlarm.iml" filepath="$PROJECT_DIR$/Final_Project_FellowAlarm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Final_Project_FellowAlarm_demo.iml" filepath="$PROJECT_DIR$/Final_Project_FellowAlarm_demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/restmanager.git/restmanager.git.iml" filepath="$PROJECT_DIR$/restmanager.git/restmanager.git.iml" />
     </modules>

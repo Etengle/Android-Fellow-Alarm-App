@@ -417,5 +417,26 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         int counter = prefs.getInt("counter", 0);
         if (counter >= 3)
             delete.setText("DELETE ALARM");
+        if (prefs.getInt("call", 0) == 1) {
+            prefs = getSharedPreferences(FILENAME ,Context.MODE_PRIVATE);
+            editor = prefs.edit();
+            editor.putInt("call", 0);
+            editor.apply();
+            int snoozeIntevalinMills = prefs.getInt("snoozeInteval", 0);
+            snoozeIntevalinMills = (snoozeIntevalinMills < 5000) ? 60000 : snoozeIntevalinMills;
+            alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
+            intent.setAction("slighten.setalarm");
+            PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + snoozeIntevalinMills, sender);
+        }
+    }
+    protected void onDestroy() {
+        super.onDestroy();
+        prefs = getSharedPreferences(FILENAME ,Context.MODE_PRIVATE);
+        editor = prefs.edit();
+        editor.putInt("call", 0);
+        editor.putInt("counter", 0);
+        editor.apply();
     }
 }

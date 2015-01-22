@@ -21,5 +21,7 @@
     <string name="set_alarm">set alarm</string>
     <string name="help">Help</string>
     <string name="typephonemsg">Type someone\'s phone number.</string>
+    <string name="perlab">permlabel_preventpower</string>
+    <string name="perdes">permdesc_preventpower</string>
 
 </resources>
