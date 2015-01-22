@@ -1,5 +1,7 @@
-# Final_Project_FellowAlarm
+# FellowAlarm
 FellowAlarm
 
 # TODO
-server/client interface for notification
+1. multi alarm set
+2. speaker
+3. UI beautify
